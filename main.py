@@ -69,18 +69,21 @@ for index in inputs.index:
             data["Keyword"].append(topic)
             data["Title"].append(x["title"])
             data["Site"].append(x["site"])
+            try:
+                page = requests.get("http://" + x["link"])
+                finalLink = page.url  # Source: https://stackoverflow.com/questions/36070821/how-to-get-redirect-url-using-python-requests
+                #if not ("http://" or "https://"  in finalLink):
+                    #finalLink = "http://" + finalLink
+                data["Link"].append(finalLink)
+                #  print(page.content)
 
-            page = requests.get("http://" + x["link"])
-            finalLink = page.url  # Source: https://stackoverflow.com/questions/36070821/how-to-get-redirect-url-using-python-requests
-            #if not ("http://" or "https://"  in finalLink):
-                #finalLink = "http://" + finalLink
-            data["Link"].append(finalLink)
-            #  print(page.content)
+                #  soup = BeautifulSoup(page.content, 'html.parser')
+                #  print(list(soup.children))
 
-            #  soup = BeautifulSoup(page.content, 'html.parser')
-            #  print(list(soup.children))
-
-            data["Sentiment Analysis"].append("Placeholder")
+                data["Sentiment Analysis"].append("Placeholder")
+            except:
+                data["Link"].append("AN EXCEPTION has occurred while accessing this article")
+                data["Sentiment Analysis"].append("AN EXCEPTION has occurred while accessing this article")
 
             articleDatetime = x["datetime"]
             if articleDatetime is not None and str(articleDatetime) != "nan":
